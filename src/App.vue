@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <Form @add="onAdd" />
-    <Posts :list="list" />
+    <Posts :list="list" @del="onDel" />
   </div>
 </template>
 
@@ -21,6 +21,9 @@ export default {
     onAdd(form) {
       this.list.push({id: Date.now(), title: form.title, desc: form.desc});
     },
+    onDel(id) {
+      this.list = this.list.filter(item => item.id !== id);
+    }
   },
 }
 </script>

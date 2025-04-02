@@ -2,7 +2,7 @@
   <div class="form">
     <input class="input" type="text" v-model="form.title">
     <input class="input" type="text" v-model="form.desc">
-    <button class="btn" @click="onAdd">Add</button>
+    <Button class="btn" @click="onAdd">Add</Button>
   </div>
 </template>
 
@@ -38,13 +38,5 @@ export default {
   width: 100%;
   height: 30px;
   border: 2px solid teal;
-}
-.btn {
-  background: teal;
-  color: white;
-  border: none;
-  font-size: 16px;
-  height: 30px;
-  cursor: pointer;
 }
 </style>
