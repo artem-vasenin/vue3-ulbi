@@ -1,7 +1,7 @@
 <template>
   <div class="form">
-    <input class="input" type="text" v-model="form.title">
-    <input class="input" type="text" v-model="form.desc">
+    <TextInput class="input" type="text" v-model="form.title"/>
+    <TextInput class="input" type="text" v-model="form.desc"/>
     <Button class="btn" @click="onAdd">Add</Button>
   </div>
 </template>
@@ -33,10 +33,5 @@ export default {
   flex-direction: column;
   justify-content: flex-end;
   gap: 12px;
-}
-.input {
-  width: 100%;
-  height: 30px;
-  border: 2px solid teal;
 }
 </style>
