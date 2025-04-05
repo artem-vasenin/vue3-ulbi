@@ -20,12 +20,12 @@ export default {
   },
   watch: {
     // если мы хотим отслеживать глубокое изменение в объектах (аналог useEffect)
-    form: {
-      handler(newValue) {
-        console.log(newValue);
-      },
-      deep: true,
-    },
+    // form: {
+    //   handler(newValue) {
+    //     console.log(newValue);
+    //   },
+    //   deep: true,
+    // },
   },
   methods: {
     onAdd() {

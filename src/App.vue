@@ -18,6 +18,14 @@
     </Dialog>
     <div v-if="loading">Loading...</div>
     <Posts v-else :list="sortedPosts" @del="onDel" />
+    <div class="pagination">
+      <div
+          class="page"
+          v-for="p in pages"
+          :class="{active: p === page}"
+          @click="getPage(p)"
+      >{{p}}</div>
+    </div>
   </div>
 </template>
 
@@ -26,8 +34,8 @@ import axios from 'axios';
 
 import Posts from '@/components/Posts.vue';
 import Form from '@/components/Form.vue';
-import Select from '@/components/ui/Select.vue';
 import TextInput from '@/components/ui/TextInput.vue';
+import Select from '@/components/ui/Select.vue';
 
 export default {
   name: 'App',
@@ -39,6 +47,9 @@ export default {
       loading: false,
       selected: '',
       search: '',
+      page: 1,
+      limit: 10,
+      pages: 0,
     }
   },
   computed: {
@@ -64,6 +75,9 @@ export default {
     //     });
     //   }
     // },
+    page() {
+      this.getList();
+    },
   },
   methods: {
     onAdd(form) {
@@ -79,13 +93,19 @@ export default {
     async getList() {
       this.loading = true;
       try {
-        const res = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+        const res = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+          params: { _page: this.page, _limit: this.limit },
+        });
         this.list = res.data;
+        this.pages = Math.ceil(res.headers['x-total-count'] / this.limit);
       } catch (e) {
         console.error(e);
       } finally {
         this.loading = false;
       }
+    },
+    getPage(page) {
+      this.page = page;
     },
   },
   mounted() {
@@ -127,5 +147,28 @@ export default {
     color: white;
     right: 0;
     cursor: pointer;
+  }
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    width: 100%;
+    padding-top: 12px;
+  }
+  .page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: #cccccc;
+    cursor: pointer;
+
+    &.active {
+      background-color: teal;
+      color: white;
+      cursor: default;
+    }
   }
 </style>
