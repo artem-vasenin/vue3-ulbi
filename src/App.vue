@@ -14,7 +14,7 @@
       <Form @add="onAdd" />
     </Dialog>
     <div v-if="loading">Loading...</div>
-    <Posts v-else :list="list" @del="onDel" />
+    <Posts v-else :list="sortedPosts" @del="onDel" />
   </div>
 </template>
 
@@ -36,14 +36,24 @@ export default {
       selected: '',
     }
   },
-  watch: {
-    selected(value) {
-      if (value) {
-        this.list.sort((a, b) => {
-          return a[value]?.localeCompare(b[value]);
-        });
+  computed: {
+    // вариант с вычисляемым свойством (аналог useMemo)
+    sortedPosts() {
+      if (this.selected) {
+        return [...this.list].sort((a, b) => a[this.selected].localeCompare(b[this.selected]));
       }
+      return this.list;
     },
+  },
+  watch: {
+    // вариант с вотчером
+    // selected(value) {
+    //   if (value) {
+    //     this.list.sort((a, b) => {
+    //       return a[value]?.localeCompare(b[value]);
+    //     });
+    //   }
+    // },
   },
   methods: {
     onAdd(form) {
