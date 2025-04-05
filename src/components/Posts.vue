@@ -2,11 +2,13 @@
   <div class="list">
     <div class="empty" v-if="!list.length">List is empty...</div>
     <template v-else>
-      <div class="post" v-for="p in list" :key="p.id">
-        <div class="post__title">Title: <b>{{p.title}}</b></div>
-        <div class="post_desc">Desc: <b>{{p.body}}</b></div>
-        <button class="post__del" @click="del(p.id)">del</button>
-      </div>
+      <transition-group name="list">
+        <div class="post" v-for="p in list" :key="p.id">
+          <div class="post__title">Title: <b>{{p.title}}</b></div>
+          <div class="post_desc">Desc: <b>{{p.body}}</b></div>
+          <button class="post__del" @click="del(p.id)">del</button>
+        </div>
+      </transition-group>
     </template>
   </div>
 </template>
@@ -35,6 +37,7 @@ export default {
   padding: 12px;
   border: 2px solid teal;
   position: relative;
+  background: #fff;
 
   &__title {
     color: teal;
@@ -61,5 +64,17 @@ export default {
       box-shadow: 0 0 2px rgba(0, 0, 0, .6);
     }
   }
+}
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+.list-move {
+  transition: transform 0.5s ease;
 }
 </style>
