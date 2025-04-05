@@ -4,7 +4,8 @@
     <Dialog v-model:show="dialog" @click="hideModal">
       <Form @add="onAdd" />
     </Dialog>
-    <Posts :list="list" @del="onDel" />
+    <div v-if="loading">Loading...</div>
+    <Posts v-else :list="list" @del="onDel" />
   </div>
 </template>
 
@@ -21,6 +22,7 @@ export default {
     return {
       list: [],
       dialog: false,
+      loading: false,
     }
   },
   methods: {
@@ -35,11 +37,14 @@ export default {
       this.dialog = false;
     },
     async getList() {
+      this.loading = true;
       try {
         const res = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
         this.list = res.data;
       } catch (e) {
         console.error(e);
+      } finally {
+        this.loading = false;
       }
     },
   },
