@@ -1,6 +1,15 @@
 <template>
   <div class="app">
-    <h1 class="title">Posts list <span class="add" @click="dialog=true">Add new</span></h1>
+    <div class="title">
+      Posts list
+      <div class="actions">
+        <Select
+            v-model="selected"
+            :options="[{name: 'title', value: 'title'}, {name: 'body', value: 'body'}]"
+        />
+        <span class="add" @click="dialog=true">Add new</span>
+      </div>
+    </div>
     <Dialog v-model:show="dialog" @click="hideModal">
       <Form @add="onAdd" />
     </Dialog>
@@ -14,16 +23,27 @@ import axios from 'axios';
 
 import Posts from '@/components/Posts.vue';
 import Form from '@/components/Form.vue';
+import Select from '@/components/ui/Select.vue';
 
 export default {
   name: 'App',
-  components: { Posts, Form },
+  components: {Select, Posts, Form },
   data: function () {
     return {
       list: [],
       dialog: false,
       loading: false,
+      selected: '',
     }
+  },
+  watch: {
+    selected(value) {
+      if (value) {
+        this.list.sort((a, b) => {
+          return a[value]?.localeCompare(b[value]);
+        });
+      }
+    },
   },
   methods: {
     onAdd(form) {
@@ -60,12 +80,22 @@ export default {
     padding: 20px;
   }
   .title {
-    text-align: center;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+  .actions {
+    position: absolute;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
   }
   .add {
     display: inline-flex;
-    position: absolute;
     font-size: 12px;
     padding: 4px 10px;
     background: teal;

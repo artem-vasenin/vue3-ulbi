@@ -18,6 +18,15 @@ export default {
       },
     };
   },
+  watch: {
+    // если мы хотим отслеживать глубокое изменение в объектах (аналог useEffect)
+    form: {
+      handler(newValue) {
+        console.log(newValue);
+      },
+      deep: true,
+    },
+  },
   methods: {
     onAdd() {
       if (!this.form.title || !this.form.body) return;
