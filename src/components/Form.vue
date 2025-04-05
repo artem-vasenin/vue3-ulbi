@@ -1,7 +1,8 @@
 <template>
   <div class="form">
+    <h3>Add task</h3>
     <TextInput class="input" type="text" v-model="form.title"/>
-    <TextInput class="input" type="text" v-model="form.desc"/>
+    <TextInput class="input" type="text" v-model="form.body"/>
     <Button class="btn" @click="onAdd">Add</Button>
   </div>
 </template>
@@ -13,15 +14,15 @@ export default {
     return {
       form: {
         title: '',
-        desc: '',
+        body: '',
       },
     };
   },
   methods: {
     onAdd() {
-      if (!this.form.title || !this.form.desc) return;
+      if (!this.form.title || !this.form.body) return;
       this.$emit('add', this.form);
-      this.form = { title: '', desc: '' };
+      this.form = { title: '', body: '' };
     },
   }
 };

@@ -9,6 +9,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 import Posts from '@/components/Posts.vue';
 import Form from '@/components/Form.vue';
 
@@ -23,7 +25,7 @@ export default {
   },
   methods: {
     onAdd(form) {
-      this.list.push({id: Date.now(), title: form.title, desc: form.desc});
+      this.list.push({id: Date.now(), title: form.title, body: form.body});
       this.dialog = false;
     },
     onDel(id) {
@@ -32,6 +34,17 @@ export default {
     hideModal() {
       this.dialog = false;
     },
+    async getList() {
+      try {
+        const res = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+        this.list = res.data;
+      } catch (e) {
+        console.error(e);
+      }
+    },
+  },
+  mounted() {
+    this.getList();
   },
 }
 </script>
