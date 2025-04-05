@@ -1,6 +1,9 @@
 <template>
   <div class="app">
     <div class="title">
+      <div class="search">
+        <TextInput v-model="search" class="search-input" placeholder="Search..." />
+      </div>
       Posts list
       <div class="actions">
         <Select
@@ -24,25 +27,32 @@ import axios from 'axios';
 import Posts from '@/components/Posts.vue';
 import Form from '@/components/Form.vue';
 import Select from '@/components/ui/Select.vue';
+import TextInput from '@/components/ui/TextInput.vue';
 
 export default {
   name: 'App',
-  components: {Select, Posts, Form },
+  components: {TextInput, Select, Posts, Form },
   data: function () {
     return {
       list: [],
       dialog: false,
       loading: false,
       selected: '',
+      search: '',
     }
   },
   computed: {
     // вариант с вычисляемым свойством (аналог useMemo)
     sortedPosts() {
+      const list = this.search.trim()
+        ? this.list.filter(i => i.title.toLowerCase().includes(this.search.trim().toLowerCase())
+              || i.body.toLowerCase().includes(this.search.trim().toLowerCase()))
+        : this.list;
+
       if (this.selected) {
-        return [...this.list].sort((a, b) => a[this.selected].localeCompare(b[this.selected]));
+        return list.sort((a, b) => a[this.selected].localeCompare(b[this.selected]));
       }
-      return this.list;
+      return list;
     },
   },
   watch: {
@@ -95,6 +105,11 @@ export default {
     align-items: center;
     justify-content: center;
     width: 100%;
+  }
+  .search {
+    position: absolute;
+    left: 0;
+    width: 200px;
   }
   .actions {
     position: absolute;
