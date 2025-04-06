@@ -39,7 +39,7 @@ import TextInput from '@/components/ui/TextInput.vue';
 import Select from '@/components/ui/Select.vue';
 
 export default {
-  name: 'Posts',
+  name: 'PostsPage',
   components: {TextInput, Select, Posts, Form },
   data: function () {
     return {
