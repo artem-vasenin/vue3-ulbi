@@ -4,6 +4,7 @@ import App from "@/App.vue";
 import ui from '@/components/ui';
 import router from '@/router/router';
 import directives from '@/directives';
+import store from '@/store';
 
 const app = createApp(App);
 
@@ -17,4 +18,5 @@ directives.forEach(d => {
 
 app
   .use(router)
+  .use(store)
   .mount('#app')
