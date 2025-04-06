@@ -72,5 +72,6 @@ export default {
       }
       return list;
     },
-  }
+  },
+  namespaced: true,
 }
