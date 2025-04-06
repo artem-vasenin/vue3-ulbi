@@ -1,7 +1,7 @@
 <template>
   <div class="form">
     <h3>Add task</h3>
-    <TextInput class="input" type="text" v-model="form.title"/>
+    <TextInput class="input" type="text" v-model="form.title" v-focus/>
     <TextInput class="input" type="text" v-model="form.body"/>
     <Button class="btn" @click="onAdd">Add</Button>
   </div>

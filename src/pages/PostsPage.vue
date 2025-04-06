@@ -26,7 +26,7 @@
     <!--          @click="getPage(p)"-->
     <!--      >{{p}}</div>-->
     <!--    </div>-->
-    <div ref="observer" class="observer"></div>
+    <div v-intersection="addToList" class="observer"></div>
   </div>
 </template>
 
@@ -115,21 +115,9 @@ export default {
       this.page += 1;
       this.list = [...this.list, ...await this.fetchPosts()];
     },
-    onScroll() {
-      const observer = new IntersectionObserver((entries) => {
-        if (entries.length > 0 && entries[0].isIntersecting && !this.isFirstRender && this.page < this.pages) {
-          this.addToList();
-        }
-      }, { rootMargin: '0px', threshold: 1.0 });
-      observer.observe(this.$refs.observer);
-    },
-    // getPage(page) {
-    //   this.page = page;
-    // },
   },
   mounted() {
     this.setList();
-    this.onScroll();
   },
 }
 </script>
