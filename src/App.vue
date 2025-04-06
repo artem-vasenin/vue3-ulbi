@@ -18,14 +18,15 @@
     </Dialog>
     <div v-if="loading">Loading...</div>
     <Posts v-else :list="sortedPosts" @del="onDel" />
-    <div class="pagination">
-      <div
-          class="page"
-          v-for="p in pages"
-          :class="{active: p === page}"
-          @click="getPage(p)"
-      >{{p}}</div>
-    </div>
+<!--    <div class="pagination">-->
+<!--      <div-->
+<!--          class="page"-->
+<!--          v-for="p in pages"-->
+<!--          :class="{active: p === page}"-->
+<!--          @click="getPage(p)"-->
+<!--      >{{p}}</div>-->
+<!--    </div>-->
+    <div ref="observer" class="observer"></div>
   </div>
 </template>
 
@@ -50,6 +51,7 @@ export default {
       page: 1,
       limit: 10,
       pages: 0,
+      isFirstRender: true,
     }
   },
   computed: {
@@ -75,9 +77,9 @@ export default {
     //     });
     //   }
     // },
-    page() {
-      this.getList();
-    },
+    // page() {
+    //   this.setList();
+    // },
   },
   methods: {
     onAdd(form) {
@@ -90,26 +92,44 @@ export default {
     hideModal() {
       this.dialog = false;
     },
-    async getList() {
+    async fetchPosts() {
       this.loading = true;
       try {
         const res = await axios.get('https://jsonplaceholder.typicode.com/posts', {
           params: { _page: this.page, _limit: this.limit },
         });
-        this.list = res.data;
         this.pages = Math.ceil(res.headers['x-total-count'] / this.limit);
+        return res.data;
       } catch (e) {
         console.error(e);
+        return [];
       } finally {
         this.loading = false;
       }
     },
-    getPage(page) {
-      this.page = page;
+    async setList() {
+      this.list = await this.fetchPosts();
+      this.isFirstRender = false;
     },
+    async addToList() {
+      this.page += 1;
+      this.list = [...this.list, ...await this.fetchPosts()];
+    },
+    onScroll() {
+      const observer = new IntersectionObserver((entries) => {
+        if (entries.length > 0 && entries[0].isIntersecting && !this.isFirstRender && this.page < this.pages) {
+          this.addToList();
+        }
+      }, { rootMargin: '0px', threshold: 1.0 });
+      observer.observe(this.$refs.observer);
+    },
+    // getPage(page) {
+    //   this.page = page;
+    // },
   },
   mounted() {
-    this.getList();
+    this.setList();
+    this.onScroll();
   },
 }
 </script>

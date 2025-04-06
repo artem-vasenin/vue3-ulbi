@@ -4,7 +4,7 @@
     <template v-else>
       <transition-group name="list">
         <div class="post" v-for="p in list" :key="p.id">
-          <div class="post__title">Title: <b>{{p.title}}</b></div>
+          <div class="post__title">Title #{{p.id}}: <b>{{p.title}}</b></div>
           <div class="post_desc">Desc: <b>{{p.body}}</b></div>
           <button class="post__del" @click="del(p.id)">del</button>
         </div>
